@@ -25,6 +25,7 @@ function buildPage(data) {
 
 
     const headEl = document.querySelector('head')
+    headEl.appendChild(elt('link', { props: { href: `https://fonts.googleapis.com/css2?family=${ libraryData.siteData[0].headingFont.replace(" ", "+") }&family=${ libraryData.siteData[0].bodyFont.replace(" ", "+") }&display=swap` }}))
     headEl.appendChild(elt('style', {}, `
     :root {
         font-family: '${ libraryData.siteData[0].bodyFont }';
