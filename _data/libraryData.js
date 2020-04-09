@@ -6,8 +6,8 @@ module.exports = async function () {
     async function init() {
         return Tabletop.init({ key: publicSpreadsheetUrl,
                         }).then((data, tabletop) => {
-                            console.log('got the data!', data['Personal Collection'].elements)
-                            return data['Personal Collection'].elements
+                            console.log('got the data!', data['Books'].elements)
+                            return data['Books'].elements
                         })
     }
 
