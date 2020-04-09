@@ -5,18 +5,17 @@ title: Library Home
 <h1>Library</h1>
 <section class='library-grid'>
     {%- for book in libraryData -%}
-    {%- if book.show == "y" -%}
+    {%- if book.show == "TRUE" -%}
     <article class='book-card'>
         <div class='book-cover'>
             <img alt='{{ book.title }} cover' src='/img/books/{{ book.coverImg }}'>
         </div>
         <div class='book-back'>
-            <h2 id='{{ book.title | slug }}'>{{ book.title }}{%- if book.subtitle -%}:</h2>
+            <h2 id='{{ book.title | slug }}'>{{ book.title }}{%- if book.subtitle -%}:{%- endif -%}</h2>
+            {%- if book.subtitle -%}
             <p class='subtitle'><em>{{ book.subtitle }}</em></p>
-            {%- else -%}
-            </h2>
             {%- endif -%}
-            <p>by {{ book.author }}</p>
+            <p>{% if (not book.author) and (book.editor) %}edited by {{ book.editor }}{% else %}by {{ book.author }}{% endif %}</p>
             <p>Published: {{ book.publishDate }}</p>
             <p>Pages: {{ book.pages }}</p>
             {%- if book.rating -%}
@@ -28,7 +27,7 @@ title: Library Home
                     ☆
                     {%- endif -%}
                 {%- endfor -%}</p>
-            {% endif %}
+            {%- endif -%}
             {%- if book.review -%}
                 <h3>Review</h3>
                 <p>{{ book.review }}</p>
