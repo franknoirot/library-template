@@ -27,7 +27,7 @@ function buildPage(data) {
     const headEl = document.querySelector('head')
     const mainStyles = document.getElementById('main-styles')
     headEl.insertBefore(
-        elt('link', { props: { href: `https://fonts.googleapis.com/css2?family=${ libraryData.siteData[0].headingFont.replace(" ", "+") }&family=${ libraryData.siteData[0].bodyFont.replace(" ", "+") }&display=swap` }}),
+        elt('link', { props: { href: `https://fonts.googleapis.com/css2?family=${ libraryData.siteData[0].headingFont.replace(" ", "+") }&family=${ libraryData.siteData[0].bodyFont.replace(" ", "+") }&display=swap`, rel: 'stylesheet' }}),
         mainStyles
     )
 
