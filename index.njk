@@ -4,7 +4,7 @@ title: Library Home
 ---
 <h1>Library</h1>
 <section class='library-grid'>
-    {%- for book in libraryData -%}
+    {%- for book in libraryData.books -%}
     {%- if book.show == "TRUE" -%}
     <article class='book-card'>
         <div class='book-cover'>

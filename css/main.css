@@ -1,8 +1,15 @@
+body {
+    background-color: var(--background-color);
+    box-sizing: border-box;
+    padding: 2em;
+    color: var(--text-color);
+}
+
 .library-grid {
     --gap: 2em;
     margin: 5em 3em;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
     gap: calc(var(--gap) * 2) var(--gap);
 }
  
@@ -46,6 +53,7 @@
 }
 
 .book-back {
+    background: var(--card-color);
     position: absolute;
     left: 0;
     top: 0;

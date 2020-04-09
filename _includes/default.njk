@@ -1,12 +1,34 @@
+{%- set siteConfig = libraryData.siteData[0] -%}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ title }} | Library Site Example</title>
-    <link rel='stylesheet' href='/css/main.css'
+    {%- if noindex -%}
+    <meta name="robots" content="noindex, nofollow">
+    {%- endif -%}
+    <link href="https://fonts.googleapis.com/css2?family={{ siteConfig.headingFont | replace(" ", "+") }}&family={{ siteConfig.bodyFont | replace(" ", "+") }}&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            font-family: '{{ siteConfig.bodyFont }}';
+            --background-color: {{ siteConfig.backgroundColor }};
+            --text-color: {{ siteConfig.textColor }};
+            --card-color: {{ siteConfig.cardColor }};
+        }
+
+        h1,h2,h3,h4,h5,h6 {
+            font-family: '{{ siteConfig.headingFont }}';
+        }
+    </style>
+    <link rel='stylesheet' href='/css/main.css'>
 </head>
 <body>
     {{ content | safe}}
+    {%- if scripts -%}
+        {%- for script in scripts -%}
+        <script type='text/javascript' src='{{ script }}'></script>
+        {%- endfor -%}
+    {%- endif -%}
 </body>
 </html>

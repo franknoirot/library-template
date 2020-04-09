@@ -3,8 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Library Home | Library Site Example</title>
-    <link rel='stylesheet' href='/css/main.css'
+    <title>Library Home | Library Site Example</title><link href="https://fonts.googleapis.com/css2?family=Fira+Sans&family=Quicksand&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            font-family: 'Quicksand';
+            --background-color: #343434;
+            --text-color: #ffffff;
+            --card-color: hsl(190deg, 20%, 32%);
+        }
+
+        h1,h2,h3,h4,h5,h6 {
+            font-family: 'Fira Sans';
+        }
+    </style>
+    <link rel='stylesheet' href='/css/main.css'>
 </head>
 <body>
     <h1>Library</h1>
@@ -34,6 +46,14 @@
             <p>Published: 2008</p>
             <p>Pages: 261</p><p>Rating:★★★★★</p><h3>Review</h3>
                 <p>One of my favorite books I&#39;ve ever read. There is a reason this is hailed as one of the greatest works of modern literature, and there is way more than any pop culture rendition of the story.</p></div>
+    </article><article class='book-card'>
+        <div class='book-cover'>
+            <img alt='From the Ground Up cover' src='/img/books/from-the-ground-up.jpg'>
+        </div>
+        <div class='book-back'>
+            <h2 id='from-the-ground-up'>From the Ground Up:</h2><p class='subtitle'><em>Environmental Racism and the Rise of the Environmental Justice Movement</em></p><p>by Luke W. Cole &amp; Sheila R. Foster</p>
+            <p>Published: 2001</p>
+            <p>Pages: 243</p></div>
     </article><article class='book-card'>
         <div class='book-cover'>
             <img alt='Hammond&#39;s Handy Atlas of the World cover' src='/img/books/hammonds-handy-atlas.jpg'>
@@ -109,6 +129,14 @@
             <p>Pages: 320</p><p>Rating:★★★★★</p></div>
     </article><article class='book-card'>
         <div class='book-cover'>
+            <img alt='Rules and Representations cover' src='/img/books/signs-and-symbols.jpg'>
+        </div>
+        <div class='book-back'>
+            <h2 id='rules-and-representations'>Rules and Representations:</h2><p class='subtitle'><em>Woodbridge Lectures delivered at Columbia University in November 1978, Number Eleven</em></p><p>by Noam Chomsky</p>
+            <p>Published: 1980</p>
+            <p>Pages: 299</p></div>
+    </article><article class='book-card'>
+        <div class='book-cover'>
             <img alt='Space, Time &amp; Architecture cover' src='/img/books/space-time-architecture.jpg'>
         </div>
         <div class='book-back'>
@@ -165,21 +193,12 @@
             <p>Pages: 387</p><p>Rating:★★★☆☆</p></div>
     </article><article class='book-card'>
         <div class='book-cover'>
-            <img alt='The Professor of Desire cover' src='/img/books/professor-of-desire.jpg'>
+            <img alt='Zero Kelvin cover' src='/img/books/zero-kelvin.jpg'>
         </div>
         <div class='book-back'>
-            <h2 id='the-professor-of-desire'>The Professor of Desire</h2><p>by Roth, Phillip</p>
-            <p>Published: 1978</p>
-            <p>Pages: 248</p></div>
-    </article><article class='book-card'>
-        <div class='book-cover'>
-            <img alt='From the Ground Up cover' src='/img/books/from-the-ground-up.jpg'>
-        </div>
-        <div class='book-back'>
-            <h2 id='from-the-ground-up'>From the Ground Up:</h2><p class='subtitle'><em>Environmental Racism and the Rise of the Environmental Justice Movement</em></p><p>by Luke W. Cole &amp; Sheila R. Foster</p>
-            <p>Published: 2001</p>
-            <p>Pages: 243</p></div>
+            <h2 id='zero-kelvin'>Zero Kelvin</h2><p>by Richard Norman</p>
+            <p>Published: 2013</p>
+            <p>Pages: 64</p></div>
     </article></section>
-<script src='./js/library.js'></script> 
-</body>
+<script src='./js/library.js'></script> </body>
 </html>
