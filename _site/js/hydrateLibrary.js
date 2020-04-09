@@ -25,7 +25,7 @@ function buildPage(data) {
 
 
     const headEl = document.querySelector('head')
-    headEl.insertBefore(elt('style', { props: { id: 'live-preview-styles' }}, `
+    headEl.appendChild(elt('style', {}, `
     :root {
         font-family: '${ libraryData.siteData[0].bodyFont }';
         --background-color: ${ libraryData.siteData[0].backgroundColor };
@@ -36,7 +36,7 @@ function buildPage(data) {
     h1,h2,h3,h4,h5,h6 {
         font-family: '${ libraryData.siteData[0].headingFont }';
     }
-    `), document.getElementById('main-styles'))
+    `))
 
 
     for (book of libraryData.books.filter(book => book.show === 'TRUE')) {
@@ -57,6 +57,8 @@ function buildPage(data) {
             cardFront,
             cardBack,
         )
+
+        card.addEventListener('click', function() { this.classList.toggle('flipped')})
 
         libraryGrid.appendChild(card)
     }
