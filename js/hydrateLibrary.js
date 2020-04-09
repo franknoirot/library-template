@@ -58,6 +58,8 @@ function buildPage(data) {
             cardBack,
         )
 
+        card.addEventListener('click', function() { this.classList.toggle('flipped')})
+
         libraryGrid.appendChild(card)
     }
 }
