@@ -25,8 +25,13 @@ function buildPage(data) {
 
 
     const headEl = document.querySelector('head')
-    headEl.appendChild(elt('link', { props: { href: `https://fonts.googleapis.com/css2?family=${ libraryData.siteData[0].headingFont.replace(" ", "+") }&family=${ libraryData.siteData[0].bodyFont.replace(" ", "+") }&display=swap` }}))
-    headEl.appendChild(elt('style', {}, `
+    const mainStyles = document.getElementById('main-styles')
+    headEl.insertBefore(
+        elt('link', { props: { href: `https://fonts.googleapis.com/css2?family=${ libraryData.siteData[0].headingFont.replace(" ", "+") }&family=${ libraryData.siteData[0].bodyFont.replace(" ", "+") }&display=swap` }}),
+        mainStyles
+    )
+
+    headEl.insertBefore(elt('style', {}, `
     :root {
         font-family: '${ libraryData.siteData[0].bodyFont }';
         --background-color: ${ libraryData.siteData[0].backgroundColor };
@@ -37,7 +42,7 @@ function buildPage(data) {
     h1,h2,h3,h4,h5,h6 {
         font-family: '${ libraryData.siteData[0].headingFont }';
     }
-    `))
+    `), mainStyles)
 
 
     for (book of libraryData.books.filter(book => book.show === 'TRUE')) {
