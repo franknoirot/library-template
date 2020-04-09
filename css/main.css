@@ -1,0 +1,71 @@
+.library-grid {
+    --gap: 2em;
+    margin: 5em 3em;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: calc(var(--gap) * 2) var(--gap);
+}
+ 
+.book-card {
+    position: relative;
+    cursor: pointer;
+}
+
+
+.book-card img {
+    display: block;
+    max-height: 20rem;
+    margin: auto;
+}
+
+.book-cover, .book-back {
+    transform-origin: 50% 50%;
+    transform-style: preserve-3d;
+    box-shadow: 0 0vmin 0vmin rgba(0,0,0,0.4),
+                0 0vmin 0vmin rgba(0,0,0,0.2);
+    transition: all .08s ease-in-out, transform .2s ease-in-out, opacity .01s .1s linear;
+}
+
+.book-cover {
+    width: min-content;
+    z-index: 2;
+    position: relative;
+    margin: auto;
+}
+
+.book-cover:hover {
+    box-shadow: 0 .4vmin .6vmin rgba(0,0,0,0.2),
+                0 1.3vmin 1.5vmin rgba(0,0,0,0.08);
+    transform: translateY(-3px);
+}
+
+.flipped .book-cover {
+    transform: rotateY(.5turn);
+    opacity: 0;
+    z-index: 0;
+}
+
+.book-back {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
+    box-sizing: border-box;
+    padding: 1em;
+    overflow-y: auto;
+    transform: rotateY(.5turn);
+    opacity: 0;
+}
+
+.book-back h2 {
+    margin-block-start: 0;
+    margin-block-end: .5em;
+}
+
+.flipped .book-back {
+    transform: rotateY(1turn);
+    opacity: 1;
+    box-shadow: 0 .4vmin .8vmin rgba(0,0,0,0.18);
+}

@@ -1,0 +1,41 @@
+---
+layout: default.njk
+title: Library Home
+---
+<h1>Library</h1>
+<section class='library-grid'>
+    {%- for book in libraryData -%}
+    {%- if book.show == "y" -%}
+    <article class='book-card'>
+        <div class='book-cover'>
+            <img alt='{{ book.title }} cover' src='/img/books/{{ book.coverImg }}'>
+        </div>
+        <div class='book-back'>
+            <h2 id='{{ book.title | slug }}'>{{ book.title }}{%- if book.subtitle -%}:</h2>
+            <p class='subtitle'><em>{{ book.subtitle }}</em></p>
+            {%- else -%}
+            </h2>
+            {%- endif -%}
+            <p>by {{ book.author }}</p>
+            <p>Published: {{ book.publishDate }}</p>
+            <p>Pages: {{ book.pages }}</p>
+            {%- if book.rating -%}
+                {%- set ratingNum = book.rating | int -%}
+                <p>Rating:{%- for i in range(1,6) -%}
+                    {%- if i <= ratingNum -%}
+                    ★
+                    {%- else -%}
+                    ☆
+                    {%- endif -%}
+                {%- endfor -%}</p>
+            {% endif %}
+            {%- if book.review -%}
+                <h3>Review</h3>
+                <p>{{ book.review }}</p>
+            {%- endif -%}
+        </div>
+    </article>
+    {%- endif -%}
+    {%- endfor -%}
+</section>
+<script src='./js/library.js'></script> 
