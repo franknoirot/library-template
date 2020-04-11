@@ -1,4 +1,5 @@
 const fs = require("fs");
+require('dotenv').config();
 const markdownIt = require("markdown-it");
 const markdownItAnchor = require("markdown-it-anchor");
 
