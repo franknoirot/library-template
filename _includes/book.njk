@@ -1,0 +1,28 @@
+<article class='book-card'>
+    <div class='book-cover'>
+        <img alt='{{ book.title }} cover' src='/img/books/{{ book.coverImg }}' loading='lazy'>
+    </div>
+    <div class='book-back'>
+        <h2 id='{{ book.title | slug }}'>{{ book.title }}{%- if book.subtitle -%}:{%- endif -%}</h2>
+        {%- if book.subtitle -%}
+        <p class='subtitle'><em>{{ book.subtitle }}</em></p>
+        {%- endif -%}
+        <p>{% if (not book.author) and (book.editor) %}edited by {{ book.editor }}{% else %}by {{ book.author }}{% endif %}</p>
+        <p>Published: {{ book.publishDate }}</p>
+        <p>Pages: {{ book.pages }}</p>
+        {%- if book.rating -%}
+            {%- set ratingNum = book.rating | int -%}
+            <p>Rating:{%- for i in range(1,6) -%}
+                {%- if i <= ratingNum -%}
+                ★
+                {%- else -%}
+                ☆
+                {%- endif -%}
+            {%- endfor -%}</p>
+        {%- endif -%}
+        {%- if book.review -%}
+            <h3>Review</h3>
+            <p>{{ book.review }}</p>
+        {%- endif -%}
+    </div>
+</article>
