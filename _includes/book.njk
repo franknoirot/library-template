@@ -1,13 +1,13 @@
 {# nunjucks doesn't like me putting @ symbols in for Vue to pick up so I'll store them in nunjuck variables #}
 {%- set clickAlias = '@click' -%}
 
-<article class='book-card' {{ clickAlias }}="Vue.set(isFlipped, {{ loopIndex }}, !isFlipped[{{ loopIndex }}])"
+<article id='{{ book.title | slug }}' class='book-card' {{ clickAlias }}="Vue.set(isFlipped, {{ loopIndex }}, !isFlipped[{{ loopIndex }}])"
     :class="{ flipped: isFlipped[{{ loopIndex }}] }">
     <div class='book-cover'>
         <img alt='{{ book.title }} cover' src='/img/books/{{ book.coverImg }}' loading='lazy'>
     </div>
     <div class='book-back'>
-        <h2 id='{{ book.title | slug }}'>{{ book.title }}{%- if book.subtitle -%}:{%- endif -%}</h2>
+        <h2>{{ book.title }}{%- if book.subtitle -%}:{%- endif -%}</h2>
         {%- if book.subtitle -%}
         <p class='subtitle'><em>{{ book.subtitle }}</em></p>
         {%- endif -%}
