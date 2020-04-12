@@ -6,9 +6,20 @@ module.exports = async function () {
     async function init() {
         return Tabletop.init({ key: 'https://'+publicSpreadsheetUrl,
                         }).then((data, tabletop) => {
+                            const siteData = data['Site Data'].elements.map(strToBool)
+                            let books = data['Books'].elements.map(strToBool)
+
+                            if (siteData[0].ignoreArticlesInSort) {
+                                function filterArticles(str) {
+                                    return str.toLowerCase().replace(/^the |^an |^a /, '')
+                                }
+
+                                books = books.sort((bookA, bookB) => filterArticles(bookA.title) > filterArticles(bookB.title) ? 1 : -1)
+                            }
+
                             return { 
-                                siteData: data['Site Data'].elements.map(strToBool),
-                                books: data['Books'].elements.map(strToBool),
+                                siteData,
+                                books,
                             }
                         })
     }

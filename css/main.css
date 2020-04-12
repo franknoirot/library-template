@@ -109,3 +109,20 @@ body {
         font-size: 1rem;
     }
 }
+
+/* Back to Top Button */
+button.back-to-top {
+    position: fixed;
+    bottom: 5vh;
+    left: 2vw;
+    background: var(--background-color);
+    border: none;
+    padding: .75em 1em;
+    border-radius: .2em;
+    box-shadow: 0 0.2vh 0.8vh rgba(0,0,0,0.2), 0 0.7vh 1vh rgba(0,0,0,.08);
+    z-index: 3;
+}
+
+button.back-to-top:hover {
+    background: var(--card-color);
+}
