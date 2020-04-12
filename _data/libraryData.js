@@ -7,11 +7,24 @@ module.exports = async function () {
         return Tabletop.init({ key: 'https://'+publicSpreadsheetUrl,
                         }).then((data, tabletop) => {
                             return { 
-                                siteData: data['Site Data'].elements,
-                                books: data['Books'].elements,
+                                siteData: data['Site Data'].elements.map(strToBool),
+                                books: data['Books'].elements.map(strToBool),
                             }
                         })
     }
 
     return await init()
+}
+
+function strToBool(obj) {
+    function swapStr(str) {
+        if (str === 'FALSE') return false
+        if (str === 'TRUE') return true
+        else return str
+    }
+    const newObj = {}
+    for (key of Object.keys(obj)) {
+        newObj[key] = swapStr(obj[key])
+    }
+    return newObj
 }

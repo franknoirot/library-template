@@ -7,9 +7,11 @@ body {
 
 .library-grid {
     --gap: 2em;
+    --min-card-width: 230px;
+    --max-card-width: 1fr;
     margin: 5em 3em;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(var(--min-card-width), var(--max-card-width)));
     gap: calc(var(--gap) * 2) var(--gap);
 }
  
@@ -79,4 +81,31 @@ body {
     transform: rotateY(1turn);
     opacity: 1;
     box-shadow: 0 .4vmin .8vmin rgba(0,0,0,0.18);
+}
+
+@media(max-width: 500px) {
+    body {
+        padding: 1vmin;
+    }
+
+    .library-grid {
+        --min-card-width: 40%;
+        --gap: 1em;
+        margin: 2em 0;
+    }
+
+    .book-cover {
+        width: 100%;
+    }
+
+    .book-cover img {
+        height: 100%;
+        max-width: 100%;
+        align-self: flex-end;
+        object-fit: contain;
+    }
+
+    .book-back h2 {
+        font-size: 1rem;
+    }
 }

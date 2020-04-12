@@ -2,12 +2,21 @@
 layout: default.njk
 title: Library Home
 ---
+{%- set fuzzy = '{{ fuzzy }}' -%}
 <h1>Library</h1>
-<section class='library-grid'>
-    {%- for book in libraryData.books -%}
-    {%- if book.show == "TRUE" -%}
-        {%- include 'book.njk' -%}
-    {%- endif -%}
-    {%- endfor -%}
-</section>
+<main id='library'>
+    {# {%- include 'librarySearch.html' -%} #}
+    <section class='library-grid'>
+        {%- for book in libraryData.books | selectattr("show") -%}
+        {# {%- if book.show == "TRUE" -%} #}
+            {% set loopIndex = loop.index0 %}
+            {%- include 'book.njk' -%}
+        {# {%- endif -%} #}
+        {%- endfor -%}
+    </section>
+</main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.3/vue.min.js"></script>
+<script type='text/javascript'>
+    Window.libraryBooks = `{{ libraryData.books | selectattr("show") | dump }}`;
+</script>
 <script src='./js/library.js'></script> 

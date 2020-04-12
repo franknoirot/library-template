@@ -1,4 +1,8 @@
-<article class='book-card'>
+{# nunjucks doesn't like me putting @ symbols in for Vue to pick up so I'll store them in nunjuck variables #}
+{%- set clickAlias = '@click' -%}
+
+<article class='book-card' {{ clickAlias }}="Vue.set(isFlipped, {{ loopIndex }}, !isFlipped[{{ loopIndex }}])"
+    :class="{ flipped: isFlipped[{{ loopIndex }}] }">
     <div class='book-cover'>
         <img alt='{{ book.title }} cover' src='/img/books/{{ book.coverImg }}' loading='lazy'>
     </div>
