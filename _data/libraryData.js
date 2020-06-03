@@ -1,7 +1,9 @@
+
 const Tabletop = require('tabletop')
 
 module.exports = async function () {
-    let publicSpreadsheetUrl = process.env.GOOGLE_SHEET_URL
+    let publicSpreadsheetUrl = 'https://'+process.env.GOOGLE_SHEET_URL
+    console.log('google sheet = ', publicSpreadsheetUrl)
 
     async function init() {
         return Tabletop.init({ key: 'https://'+publicSpreadsheetUrl,
