@@ -11,14 +11,9 @@
     <link href="https://fonts.googleapis.com/css2?family={{ siteConfig.headingFont | replace(" ", "+") }}&family={{ siteConfig.bodyFont | replace(" ", "+") }}&display=swap" rel="stylesheet">
     <style>
         :root {
-            font-family: '{{ siteConfig.bodyFont }}';
-            --background-color: {{ siteConfig.backgroundColor }};
-            --text-color: {{ siteConfig.textColor }};
-            --card-color: {{ siteConfig.cardColor }};
-        }
-
-        h1,h2,h3,h4,h5,h6 {
-            font-family: '{{ siteConfig.headingFont }}';
+            {% for key, value in siteConfig %}
+            --{{ key }}: {{ value }};
+            {% endfor %}
         }
     </style>
     <link id='main-styles' rel='stylesheet' href='/css/main.css'>

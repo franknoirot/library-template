@@ -1,8 +1,22 @@
 body {
-    background: var(--background-color);
+    background: var(--backgroundColor);
     box-sizing: border-box;
     padding: 2em;
-    color: var(--text-color);
+    color: var(--textColor);
+    font-family: var(--bodyFont);
+}
+
+h1,h2,h3,h4,h5,h6 {
+    font-family: var(--headingFont);
+}
+
+p {
+    max-width: 80ch;
+}
+
+section {
+    margin-left: 3em;
+    margin-right: 3em;
 }
 
 .library-grid {
@@ -58,7 +72,7 @@ body {
 }
 
 .book-back {
-    background: var(--card-color);
+    background: var(--cardColor);
     position: absolute;
     left: 0;
     top: 0;

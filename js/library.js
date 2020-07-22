@@ -9,6 +9,9 @@ const fuseOptions = {
 
 // Nunjucks puts in html entities instead of real quote characters. 
 const books = JSON.parse(Window.libraryBooks.replace(/&quot;/g, '"'))
+const themes= JSON.parse(Window.themes.replace(/&quot;/g, '"'))
+
+console.log('themes = ', themes)
 
 // Fuse.js is imported as a script tag. It is a small library that provides fuzzy search
 // const fuse = new Fuse(books, fuseOptions)
@@ -22,6 +25,31 @@ books.forEach((book, i) => {
 const bookElements = Array.from(document.querySelectorAll('.book-card'))
 
 bookElements.forEach(book => book.addEventListener('click', function(e) { this.classList.toggle('flipped') }))
+
+
+// theme switcher
+const themeRadios = Array.from(document.querySelectorAll('.theme-picker input'))
+themeRadios.forEach((radio, i) => radio.addEventListener('input', () => processTheme(themes[i])))
+
+function processTheme(themeObj) {
+    if (!themeObj._processed) {
+        themeObj._processed = true
+        
+        // add new fonts to the document from Google Fonts
+        const fonts = [themeObj.headingFont, themeObj.bodyFont]
+        const linkElem = document.createElement("link")
+        linkElem.rel = 'stylesheet'
+        linkElem.href = `https://fonts.googleapis.com/css2${ fonts.map((font, i) => ((i === 0) ? '?' : '&') +"family="+ font.replace(' ', '+')).join('') }`
+        document.body.appendChild(linkElem)
+    }
+    
+    Object.keys(themeObj)
+        .filter(key => !key.includes('_'))
+        .map(key => document.body.style.setProperty(`--${ key }`,
+            (key.toLowerCase().includes('font')) ? `'${themeObj[key]}'` : themeObj[key]))
+    
+    console.log('new theme!', themeObj)
+}
 
 // new Vue({
 //     //this targets the div id app
