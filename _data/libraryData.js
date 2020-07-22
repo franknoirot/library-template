@@ -1,32 +1,43 @@
-
-const Tabletop = require('tabletop')
+require('isomorphic-fetch')
+const parse = require('csv-parse')
 
 module.exports = async function () {
-    let publicSpreadsheetUrl = 'https://'+process.env.GOOGLE_SHEET_URL
-    console.log('google sheet = ', publicSpreadsheetUrl)
+    const fetchPromises = [
+        fetch('https://' + process.env.THEME_SHEET),
+        fetch('https://' + process.env.BOOKS_SHEET),
+    ]
 
     async function init() {
-        return Tabletop.init({ key: 'https://'+publicSpreadsheetUrl,
-                        }).then((data, tabletop) => {
-                            const siteData = data['Site Data'].elements.map(strToBool)
-                            let books = data['Books'].elements.map(strToBool)
+        return Promise.all(fetchPromises).then(responses => responses.map(res => res.text()))
+            .then(csvPromises => Promise.all(csvPromises).then(async csvData => {
+                let [siteData, books] = (await Promise.all(csvData.map(csv => parseStreamPromise(csv))))
+                    .map(dataArr => dataArr.map(strToBool))
 
-                            if (siteData[0].ignoreArticlesInSort) {
-                                function filterArticles(str) {
-                                    return str.toLowerCase().replace(/^the |^an |^a /, '')
-                                }
+                if (siteData[0].ignoreArticlesInSort) {
+                    function filterArticles(str) {
+                        return str.toLowerCase().replace(/^the |^an |^a /, '')
+                    }
 
-                                books = books.sort((bookA, bookB) => filterArticles(bookA.title) > filterArticles(bookB.title) ? 1 : -1)
-                            }
+                    books = books.sort((bookA, bookB) => filterArticles(bookA.title) > filterArticles(bookB.title) ? 1 : -1)
+                }
 
-                            return { 
-                                siteData,
-                                books,
-                            }
-                        })
+                return { 
+                    siteData,
+                    books,
+                }
+            }))
     }
 
     return await init()
+}
+
+function parseStreamPromise(csvData) {
+    return new Promise((resolve, reject) => {
+        parse(csvData, { columns: true }, function(err, result) {
+            if (err) { reject(err) }
+            else { resolve(result) }
+        })
+    })
 }
 
 function strToBool(obj) {

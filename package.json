@@ -10,12 +10,13 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@11ty/eleventy": "^0.10.0",
-    "tabletop": "^1.6.2"
+    "@11ty/eleventy": "^0.10.0"
   },
   "dependencies": {
+    "csv-parse": "^4.11.1",
     "dotenv": "^8.2.0",
     "fuse.js": "^5.1.0",
+    "isomorphic-fetch": "^2.2.1",
     "markdown-it-anchor": "^5.2.7"
   }
 }

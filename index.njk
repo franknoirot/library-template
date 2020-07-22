@@ -8,16 +8,14 @@ title: Library Home
     {# {%- include 'librarySearch.html' -%} #}
     <section class='library-grid'>
         {%- for book in libraryData.books | selectattr("show") -%}
-        {# {%- if book.show == "TRUE" -%} #}
             {% set loopIndex = loop.index0 %}
             {%- include 'book.njk' -%}
-        {# {%- endif -%} #}
         {%- endfor -%}
     </section>
     {%- include 'backToTopBtn.njk' -%}
 </main>
-<script src="https://cdn.jsdelivr.net/npm/fuse.js@5.0.10-beta"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.3/vue.min.js"></script>
+{# <script src="https://cdn.jsdelivr.net/npm/fuse.js@5.0.10-beta"></script> #}
+{# <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.3/vue.min.js"></script> #}
 <script type='text/javascript'>
     Window.libraryBooks = `{{ libraryData.books | selectattr("show") | dump }}`;
 </script>
