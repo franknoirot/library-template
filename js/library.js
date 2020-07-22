@@ -1,5 +1,9 @@
+// if this is running, show the elements that rely on JS
+Array.from(document.querySelectorAll('.js-deactivated')).forEach(elem => elem.classList.remove('js-deactivated'))
+
 const fuseOptions = {
     includeScore: true,
+    threshold: .4,
     keys: [
         { name: 'title', weight: .5 }, 
         { name: 'subtitle', weight: .2 },
@@ -11,10 +15,26 @@ const fuseOptions = {
 const books = JSON.parse(Window.libraryBooks.replace(/&quot;/g, '"'))
 const themes= JSON.parse(Window.themes.replace(/&quot;/g, '"'))
 
-console.log('themes = ', themes)
+const booksDOM = Array.from(document.querySelectorAll('.book-group'))
+
+books.forEach((book, i) => { book.elem = booksDOM[i] })
+
 
 // Fuse.js is imported as a script tag. It is a small library that provides fuzzy search
-// const fuse = new Fuse(books, fuseOptions)
+const fuse = new Fuse(books, fuseOptions)
+const searchBar = document.getElementById('search-input')
+searchBar.addEventListener('input', function(e) {
+    if (!this.value || this.value === '') {
+        booksDOM.forEach(b => b.classList.remove('hidden'))
+        return
+    }
+    booksDOM.forEach(b => b.classList.add('hidden'))
+    const bookResults = fuse.search(this.value)
+
+    console.log('results', bookResults)
+
+    bookResults.forEach(b => b.item.elem.classList.remove('hidden'))
+})
 
 // preprocess books, saving initial array position and whatnot before Vue scrambles things:
 books.forEach((book, i) => {
@@ -24,9 +44,9 @@ books.forEach((book, i) => {
 
 // theme switcher
 const themeRadios = Array.from(document.querySelectorAll('.theme-picker input'))
-themeRadios.forEach((radio, i) => radio.addEventListener('input', () => processTheme(themes[i])))
+themeRadios.forEach((radio, i) => radio.addEventListener('input', () => applyTheme(themes[i])))
 
-function processTheme(themeObj) {
+function applyTheme(themeObj) {
     if (!themeObj._processed) {
         themeObj._processed = true
         
@@ -42,32 +62,16 @@ function processTheme(themeObj) {
         .filter(key => !key.includes('_'))
         .map(key => document.body.style.setProperty(`--${ key }`,
             (key.toLowerCase().includes('font')) ? `'${themeObj[key]}'` : themeObj[key]))
-    
-    console.log('new theme!', themeObj)
 }
 
-// new Vue({
-//     //this targets the div id app
-//     el: '#library',
-//     data: {
-//         fuzzy: '', // fuzzy search term
-//         sort: {
-//             attr: 'title',
-//             order: 'desc',
-//         },
-//         sortAttrs: [
-//             'title',
-//             'author',
-//             'pages',
-//             'publishDate',
-//         ],
-//         filters: [
-//             { attr: 'read', state: 0 }, // -1 means Not Read, 0 means Off, 1 means Read
-//             { attr: 'borrowed', state: 0 }
-//         ],
-//         books: books,
-//     }, 
-//     computed: {
-//         sortedBooks: this.fuzzy ? fuse.search(this.fuzzy) : books,
-//     }
-// })
+// top nav scroll listener
+const navbar = document.querySelector('.top-navbar')
+let lastScrollY = 0
+window.addEventListener('scroll', function() {
+    if (window.scrollY > 0 && lastScrollY === 0) {
+        navbar.classList.add('stuck')
+    } else if (window.scrollY === 0) {
+        navbar.classList.remove('stuck')
+    }
+    lastScrollY = window.scrollY
+}, { passive: true })

@@ -4,6 +4,8 @@ body {
     padding: 2em;
     color: var(--textColor);
     font-family: var(--bodyFont);
+    margin: 0;
+    padding: 0;
 }
 
 h1,h2,h3,h4,h5,h6 {
@@ -15,8 +17,13 @@ p {
 }
 
 section {
-    margin-left: 3em;
-    margin-right: 3em;
+    margin-left: 5em;
+    margin-right: 5em;
+}
+
+/* for hiding elements that shouldn't appear unless JS loads (search bar, for example) */
+.js-deactivated {
+    display: none; 
 }
 
 .visually-hidden {
@@ -27,6 +34,36 @@ section {
     height: 1px !important;
     width: 1px !important;
     overflow: hidden !important;
+}
+
+.top-navbar {
+    position: sticky;
+    top: 0px;
+    padding: .8em 5em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--backgroundColor);
+    z-index: 3;
+}
+
+.top-navbar.stuck {
+    box-shadow: 0 .2em .5em rgba(0,0,0,0.2),
+                0 .8em 1em rgba(0,0,0,0.08);
+}
+
+.top-navbar .navbar-group {
+    display: flex;
+    align-items: center;
+}
+
+.top-navbar .library-search input {
+    border: none;
+    color: var(--textColor);
+    font-family: var(--bodyFont);
+    padding-inline-start: .5em;
+    background: none;
+    border-bottom: solid 1px var(--textColor);
 }
 
 .library-grid {
@@ -43,6 +80,10 @@ section {
     position: relative;
     cursor: pointer;
     transition: transform .08s ease-in-out;
+}
+
+.book-group.hidden {
+    display: none;
 }
 
 
