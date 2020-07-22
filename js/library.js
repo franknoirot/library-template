@@ -22,11 +22,6 @@ books.forEach((book, i) => {
     isFlipped = false
 })
 
-const bookElements = Array.from(document.querySelectorAll('.book-card'))
-
-bookElements.forEach(book => book.addEventListener('click', function(e) { this.classList.toggle('flipped') }))
-
-
 // theme switcher
 const themeRadios = Array.from(document.querySelectorAll('.theme-picker input'))
 themeRadios.forEach((radio, i) => radio.addEventListener('input', () => processTheme(themes[i])))

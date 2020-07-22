@@ -33,7 +33,10 @@ module.exports = async function () {
 
 function parseStreamPromise(csvData) {
     return new Promise((resolve, reject) => {
-        parse(csvData, { columns: true }, function(err, result) {
+        parse(csvData, { 
+            columns: true,
+            skip_lines_with_error: true,
+         }, function(err, result) {
             if (err) { reject(err) }
             else { resolve(result) }
         })

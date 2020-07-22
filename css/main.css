@@ -19,6 +19,16 @@ section {
     margin-right: 3em;
 }
 
+.visually-hidden {
+    position: absolute !important;
+    clip: rect(1px, 1px, 1px, 1px) !important;
+    padding: 0 !important;
+    border: 0 !important;
+    height: 1px !important;
+    width: 1px !important;
+    overflow: hidden !important;
+}
+
 .library-grid {
     --gap: 2em;
     --min-card-width: 230px;
@@ -29,13 +39,15 @@ section {
     gap: calc(var(--gap) * 2) var(--gap);
 }
  
-.book-card {
+.book-group {
     position: relative;
     cursor: pointer;
     transition: transform .08s ease-in-out;
 }
 
-.book-card:hover {
+
+.book-group:hover,
+.book-group:focus-within {
     transform: translateY(-3px);
 }
 
@@ -60,12 +72,13 @@ section {
     margin: auto;
 }
 
-.book-cover:hover {
+.book-cover:hover,
+.book-group input:focus ~ .book-card .book-cover {
     box-shadow: 0 .4vmin .6vmin rgba(0,0,0,0.2),
                 0 1.3vmin 1.5vmin rgba(0,0,0,0.08);
 }
 
-.flipped .book-cover {
+.book-group input:checked ~ .book-card .book-cover {
     transform: rotateY(.5turn);
     opacity: 0;
     z-index: 0;
@@ -91,7 +104,7 @@ section {
     margin-block-end: .5em;
 }
 
-.flipped .book-back {
+.book-group input:checked ~ .book-card .book-back {
     transform: rotateY(1turn);
     opacity: 1;
     box-shadow: 0 .4vmin .8vmin rgba(0,0,0,0.18);
