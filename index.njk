@@ -5,6 +5,7 @@ title: Library Home
 <nav class='top-navbar'>
     <h1>{{ libraryData.siteData[0].ownerName }}'s Library</h1>
     <div class='navbar-group js-deactivated'>
+        <p id='result-count'>{{ libraryData.books | selectattr("show") | length }} books</p>
         {%- include 'librarySearch.html' -%}
         <fieldset class='theme-picker'>
             <legend>Themes</legend>    

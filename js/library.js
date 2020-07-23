@@ -16,23 +16,25 @@ const books = JSON.parse(Window.libraryBooks.replace(/&quot;/g, '"'))
 const themes= JSON.parse(Window.themes.replace(/&quot;/g, '"'))
 
 const booksDOM = Array.from(document.querySelectorAll('.book-group'))
-
 books.forEach((book, i) => { book.elem = booksDOM[i] })
 
 
 // Fuse.js is imported as a script tag. It is a small library that provides fuzzy search
 const fuse = new Fuse(books, fuseOptions)
 const searchBar = document.getElementById('search-input')
+const resultCounter = document.getElementById('result-count')
 searchBar.addEventListener('input', function(e) {
     if (!this.value || this.value === '') {
         booksDOM.forEach(b => b.classList.remove('hidden'))
+        resultCounter.innerText = books.length + ' book' + ((books.length > 1) ? 's' : '')
         return
     }
     booksDOM.forEach(b => b.classList.add('hidden'))
     const bookResults = fuse.search(this.value)
-
+    
     console.log('results', bookResults)
-
+    
+    resultCounter.innerText = bookResults.length + ' book' + ((books.length > 1) ? 's' : '')
     bookResults.forEach(b => b.item.elem.classList.remove('hidden'))
 })
 
