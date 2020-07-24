@@ -17,8 +17,7 @@ p {
 }
 
 section {
-    margin-left: 5em;
-    margin-right: 5em;
+    margin: 1em 5vw;
 }
 
 /* for hiding elements that shouldn't appear unless JS loads (search bar, for example) */
@@ -39,10 +38,11 @@ section {
 .top-navbar {
     position: sticky;
     top: 0px;
-    padding: .8em 5em;
+    padding: .8em 5vw;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
     background: var(--backgroundColor);
     z-index: 3;
 }
@@ -54,6 +54,13 @@ section {
 
 .top-navbar .navbar-group {
     display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.search-group {
+    display: grid;
+    grid-template-columns: auto auto;
     align-items: center;
 }
 
@@ -151,10 +158,36 @@ section {
     box-shadow: 0 .4vmin .8vmin rgba(0,0,0,0.18);
 }
 
+
+/* Back to Top Button */
+button.back-to-top {
+    position: fixed;
+    bottom: 5vh;
+    left: 2vw;
+    background: transparent;
+    border: none;
+    padding: .75em 1em;
+    border-radius: .2em;
+    box-shadow: 0 0.2vh 0.8vh rgba(0,0,0,0.2), 0 0.7vh 1vh rgba(0,0,0,.08);
+    z-index: 6;
+    transition: background .13s ease-in-out;
+}
+
+button.back-to-top:hover {
+    background: var(--backgroundColor);
+}
+
 @media(max-width: 500px) {
     body {
         padding: 1vmin;
     }
+
+    .top-navbar .library-search {
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+
+    .top-navbar .theme-picker { display: none; }
 
     .library-grid {
         --min-card-width: 40%;
@@ -176,21 +209,8 @@ section {
     .book-back h2 {
         font-size: 1rem;
     }
-}
 
-/* Back to Top Button */
-button.back-to-top {
-    position: fixed;
-    bottom: 5vh;
-    left: 2vw;
-    background: var(--background-color);
-    border: none;
-    padding: .75em 1em;
-    border-radius: .2em;
-    box-shadow: 0 0.2vh 0.8vh rgba(0,0,0,0.2), 0 0.7vh 1vh rgba(0,0,0,.08);
-    z-index: 3;
-}
-
-button.back-to-top:hover {
-    background: var(--card-color);
+    button.back-to-top {
+        background: var(--cardColor);
+    }
 }
