@@ -8,27 +8,46 @@
             <img alt='{{ book.title }} cover' src='/img/books/{{ book.coverImg }}' loading='lazy'>
         </div>
         <div class='book-back'>
-            <h2>{{ book.title }}{%- if book.subtitle -%}:{%- endif -%}</h2>
-            {%- if book.subtitle -%}
-            <p class='subtitle'><em>{{ book.subtitle }}</em></p>
-            {%- endif -%}
+            <div class='top-line'>
+                <h2>{{ book.title }}</h2>
+                {%- if book.subtitle -%}
+                <p class='subtitle'><em>{{ book.subtitle }}</em></p>
+                {%- endif -%}
+            </div>
             <p>{% if (not book.author) and (book.editor) %}edited by {{ book.editor }}{% else %}by {{ book.author }}{% endif %}</p>
-            <p>Published: {{ book.publishDate }}</p>
-            <p>Pages: {{ book.pages }}</p>
-            {%- if book.rating -%}
+            <p>{{ book.publishDate }}{% if book.publishDate != book.firstPublished %} | first published {{ book.firstPublished }}{% endif %}</p>
+            {%- if book.rating or book.review -%}
                 {%- set ratingNum = book.rating | int -%}
-                <p>Rating:{%- for i in range(1,6) -%}
-                    {%- if i <= ratingNum -%}
-                    ★
-                    {%- else -%}
-                    ☆
+                <div class='review-row'>
+                    <h3>Review</h3>
+                    {%- if book.rating -%}
+                    <span>
+                    {%- for i in range(1,6) -%}
+                        {%- if i <= ratingNum -%}
+                        ★
+                        {%- else -%}
+                        ☆
+                        {%- endif -%}
+                    {%- endfor -%}
+                    </span>
                     {%- endif -%}
-                {%- endfor -%}</p>
+                </div>
             {%- endif -%}
             {%- if book.review -%}
-                <h3>Review</h3>
                 <p>{{ book.review }}</p>
             {%- endif -%}
+            <hr>
+            <p>{{ book.pages }} pages</p>
+            {% if book.category %}<p>Category: {{ book.category }}</p>{% endif %}
+            {% if book.translator %}<p>Translated by {{ book.translator }}</p>{% endif %}
+            {% if book.publisher %}<p>Published by {{ book.publisher }}{% endif %}{% if book.publishLocation %}in {{ book.publishLocation }}</p>{% endif %}
+            {% if book.language %}<p>Language: {{ book.language }}</p>{% endif %}
+            {% if book.tags %}<p>Tags: {{ book.tags }}</p>{% endif %}
+            <div class='borrowed-row {% if not book.isBorrowed %}active{% endif %}'>
+                <span>borrowed</span>
+                <div class='toggle'></div>
+                <span>available</span>
+            </div>
         </div>
     </label>
 </article>
