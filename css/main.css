@@ -103,7 +103,7 @@ h1::before {
     transition: transform .08s ease-in-out;
 }
 
-.booook-group.hidden {
+.book-group.hidden {
     display: none;
 }
 
