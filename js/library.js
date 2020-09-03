@@ -58,7 +58,7 @@ function applyTheme(themeObj) {
 const comparisons = [
     {short: '<', label: 'Less than', fn: (a, b) => (a && a !== null) && ((typeof a === 'string') ? a < b : a < parseInt(b)) },
     {short: '>', label: 'Greater than', fn: (a, b) =>  (a && a !== null) && ((typeof a === 'string') ? a > b : a > parseInt(b)) },
-    {short: '=', label: 'Equals', fn: (a, b) =>  (a && a !== null) && ((typeof a === 'string') ? a === b : a === parseInt(b)) },
+    {short: '=', label: 'Equal to', fn: (a, b) =>  (a && a !== null) && ((typeof a === 'string') ? a === b : a === parseInt(b)) },
     {short: 'contains', label: 'Contains', fn: (a, b) => (a && a !== null) && (a.toString().includes(b.toString())) },
     {short: "doesn't contain", label: "Doesn't contain", fn: (a, b) => (a && a !== null) && (!a.toString().includes(b.toString())) },
 ]
@@ -125,6 +125,11 @@ function filterTag (filter) {
 }
 
 const filterAddForm = document.getElementById('filter-add-form')
+Array.from(filterAddForm.children).map(formEl => formEl.addEventListener('keydown', e => {
+    if (e.keyCode === 27) {
+        filterToggle.click()
+    }
+}))
 
 function newFilter () {
     return {
@@ -180,7 +185,7 @@ function updateResults(type, val) {
     console.log('currTheme', currTheme)
     
     booksDOM.forEach(b => b.classList.add('hidden'))
-    resultCounter.innerText = filteredResults.length + ' book' + ((books.length > 1) ? 's' : '')
+    resultCounter.innerText = filteredResults.length + ' book' + ((filteredResults.length > 1) ? 's' : '')
     filteredResults.forEach(b => b.elem.classList.remove('hidden'))
 }
 
