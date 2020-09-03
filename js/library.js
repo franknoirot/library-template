@@ -15,6 +15,9 @@ const fuseOptions = {
 const books = JSON.parse(Window.libraryBooks.replace(/&quot;/g, '"'))
 const themes= JSON.parse(Window.themes.replace(/&quot;/g, '"'))
 
+let filters = []
+let lastSearch = books
+
 const booksDOM = Array.from(document.querySelectorAll('.book-group'))
 books.forEach((book, i) => { book.elem = booksDOM[i] })
 
@@ -23,28 +26,11 @@ books.forEach((book, i) => { book.elem = booksDOM[i] })
 const fuse = new Fuse(books, fuseOptions)
 const searchBar = document.getElementById('search-input')
 const resultCounter = document.getElementById('result-count')
-searchBar.addEventListener('input', function(e) {
-    if (!this.value || this.value === '') {
-        booksDOM.forEach(b => b.classList.remove('hidden'))
-        resultCounter.innerText = books.length + ' book' + ((books.length > 1) ? 's' : '')
-        return
-    }
-    booksDOM.forEach(b => b.classList.add('hidden'))
-    const bookResults = fuse.search(this.value)
-    
-    console.log('results', bookResults)
-    
-    resultCounter.innerText = bookResults.length + ' book' + ((books.length > 1) ? 's' : '')
-    bookResults.forEach(b => b.item.elem.classList.remove('hidden'))
-})
+searchBar.addEventListener('input', ({ target: { value }}) => updateResults('search', value) )
 
-// preprocess books, saving initial array position and whatnot before Vue scrambles things:
-books.forEach((book, i) => {
-    book.initialOrder = i
-    isFlipped = false
-})
 
 // theme switcher
+let currTheme = themes[0]
 const themeRadios = Array.from(document.querySelectorAll('.theme-picker input'))
 themeRadios.forEach((radio, i) => radio.addEventListener('input', () => applyTheme(themes[i])))
 
@@ -64,14 +50,17 @@ function applyTheme(themeObj) {
         .filter(key => !key.includes('_'))
         .map(key => document.body.style.setProperty(`--${ key }`,
             (key.toLowerCase().includes('font')) ? `'${themeObj[key]}'` : themeObj[key]))
+
+    currTheme = themeObj
 }
 
 // Filter state logic
 const comparisons = [
-    {label: 'Less than', fn: (a, b) => a < b },
-    {label: 'Greater than', fn: (a, b) => a < b },
-    {label: 'Contains', fn: (a, b) => a.toString().includes(b.toString()) },
-    {label: "Doesn't contain", fn: (a, b) => !a.toString().includes(b.toString()) },
+    {short: '<', label: 'Less than', fn: (a, b) => (a && a !== null) && ((typeof a === 'string') ? a < b : a < parseInt(b)) },
+    {short: '>', label: 'Greater than', fn: (a, b) =>  (a && a !== null) && ((typeof a === 'string') ? a > b : a > parseInt(b)) },
+    {short: '=', label: 'Equals', fn: (a, b) =>  (a && a !== null) && ((typeof a === 'string') ? a === b : a === parseInt(b)) },
+    {short: 'contains', label: 'Contains', fn: (a, b) => (a && a !== null) && (a.toString().includes(b.toString())) },
+    {short: "doesn't contain", label: "Doesn't contain", fn: (a, b) => (a && a !== null) && (!a.toString().includes(b.toString())) },
 ]
 function camelToTitleCase(str) {
     return str.slice(0,1).toUpperCase() + str.slice(1).replace(/[A-Z]/g, (s) => ' '+s.toUpperCase())
@@ -83,7 +72,17 @@ const filterParams = themes[0].filterFields.split(',').map(filter => {
         prop: filter.trim(),
     }
 })
-console.log('filters = ', filterParams)
+
+const filterToggle = document.getElementById('filter-toggle')
+filterToggle.addEventListener('click', () => {
+    filterToggle.classList.toggle('active')
+    if (filterToggle.classList.contains('active')) {
+        filterToggle.nextElementSibling.querySelector('form > *').focus()
+    }
+})
+
+const filterValInput = document.getElementById('filter-val-input')
+
 const filterParamDOM = document.getElementById('filter-param-dropdown')
 filterParams.forEach((param, i) => {
     const el = document.createElement("option")
@@ -100,17 +99,92 @@ comparisons.forEach((comp, i) => {
     filterCompDOM.appendChild(el)
 })
 
-const filters = []
-function addFilter(e) {
-    filters = [
-        {
-            label: filterParamDOM.innerText,
-            
-        },
-        ...filters,
-    ]
+const filterTagsContainer = document.getElementById('filter-tags-container')
+const noFiltersStatus = document.getElementById('no-filters')
+function filterTag (filter) {
+    const el = document.createElement('button')
+    el.id = filter.uid
+    el.classList.add('tag')
+    el. innerText = `${ filter.prop } ${ filter.comparison.short } "${ filter.value }"`
+    filterTagsContainer.appendChild(el)
+    el.addEventListener('click', function(e) {
+        const foundIndex = filters.findIndex(filter => filter.uid === this.id)
+        filters = [
+            ...filters.slice(0, foundIndex),
+            ...filters.slice(foundIndex + 1, filters.length),
+        ]
+        filterTagsContainer.removeChild(this)
+        updateResults('filter')
+
+        if (filters.length === 0) {
+            filterTagsContainer.appendChild(noFiltersStatus)
+        }
+    })
+
+    return el
 }
 
+const filterAddForm = document.getElementById('filter-add-form')
+
+function newFilter () {
+    return {
+        uid: Math.random().toString(36).slice(2,9),
+        label: filterParamDOM.value,
+        prop: filterParams.find(f => f.prop === filterParamDOM.value).prop,
+        comparison: comparisons[filterCompDOM.value],
+        value: filterValInput.value,
+    }
+}
+
+function addFilter(e) {
+    e.preventDefault()
+
+    const filter = newFilter()
+    filter.dom = filterTag(filter)
+
+    filters = [
+        filter,
+        ...filters,
+    ]
+
+    if (filters.length === 1) {
+        filterTagsContainer.removeChild(noFiltersStatus)
+    }
+
+    updateResults('filter')
+    filterAddForm.children[0].focus()
+}
+
+function filterResults(results, filters, propHooks) {
+    return (!filters || !filters.length)
+        ? results
+        : results.filter(result => filters.every(filter => {
+            const foundHook = propHooks.find(h => h.prop === filter.prop)
+            const sendVal = ((hook) => (val) => (hook) ? hook.hook(val) : val)(foundHook)
+
+            return filter.comparison.fn(sendVal(result[filter.prop]), sendVal(filter.value)) 
+        }))
+}
+
+function updateResults(type, val) { 
+    let searchResults = lastSearch
+    if (type === 'search') {
+        // do a new search
+        searchResults = (val && val !== null) ? fuse.search(val).map(res => res.item) : books
+        lastSearch = searchResults
+    }
+
+    const filteredResults = filterResults(searchResults, filters,
+        (currTheme.ignoreArticlesInSort) ? [{ prop: 'title', hook: t => t.toLowerCase().replace(/^the |^an |^a /, '') }] : [])
+
+    console.log('currTheme', currTheme)
+    
+    booksDOM.forEach(b => b.classList.add('hidden'))
+    resultCounter.innerText = filteredResults.length + ' book' + ((books.length > 1) ? 's' : '')
+    filteredResults.forEach(b => b.elem.classList.remove('hidden'))
+}
+
+filterAddForm.addEventListener('submit', addFilter)
 // end Filters
 
 

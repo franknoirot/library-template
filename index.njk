@@ -9,7 +9,7 @@ scripts:
     <h1>{{ libraryData.siteData[0].ownerName }}'s Library</h1>
     <div class='navbar-group js-deactivated'>
         <div class='search-group'>
-            <p id='result-count'>{{ libraryData.books | selectattr("show") | length }} books</p>
+            <p id='result-count' aria-live="polite">{{ libraryData.books | selectattr("show") | length }} books</p>
             {%- include 'librarySearch.html' -%}
         </div>
         {% include 'filters.njk' %}
