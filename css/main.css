@@ -324,6 +324,7 @@ button.back-to-top:hover {
 }
 
 .filters-inner {
+    display: none;
     position: absolute;
     background: var(--backgroundColor);
     padding: 1rem 1.5rem;
@@ -337,6 +338,7 @@ button.back-to-top:hover {
 }
 
 #filter-toggle.active + .filters-inner {
+    display: block;
     opacity: 1;
     transform: translate(0);
 }
