@@ -66,6 +66,54 @@ function applyTheme(themeObj) {
             (key.toLowerCase().includes('font')) ? `'${themeObj[key]}'` : themeObj[key]))
 }
 
+// Filter state logic
+const comparisons = [
+    {label: 'Less than', fn: (a, b) => a < b },
+    {label: 'Greater than', fn: (a, b) => a < b },
+    {label: 'Contains', fn: (a, b) => a.toString().includes(b.toString()) },
+    {label: "Doesn't contain", fn: (a, b) => !a.toString().includes(b.toString()) },
+]
+function camelToTitleCase(str) {
+    return str.slice(0,1).toUpperCase() + str.slice(1).replace(/[A-Z]/g, (s) => ' '+s.toUpperCase())
+}
+
+const filterParams = themes[0].filterFields.split(',').map(filter => {
+    return {
+        label: camelToTitleCase(filter.trim()),
+        prop: filter.trim(),
+    }
+})
+console.log('filters = ', filterParams)
+const filterParamDOM = document.getElementById('filter-param-dropdown')
+filterParams.forEach((param, i) => {
+    const el = document.createElement("option")
+    el.value = filterParams[i].prop
+    el.innerText = filterParams[i].label
+    filterParamDOM.appendChild(el)
+})
+
+const filterCompDOM = document.getElementById('filter-comp-dropdown')
+comparisons.forEach((comp, i) => {
+    const el = document.createElement("option")
+    el.value = i
+    el.innerText = comp.label
+    filterCompDOM.appendChild(el)
+})
+
+const filters = []
+function addFilter(e) {
+    filters = [
+        {
+            label: filterParamDOM.innerText,
+            
+        },
+        ...filters,
+    ]
+}
+
+// end Filters
+
+
 // top nav scroll listener
 const navbar = document.querySelector('.top-navbar')
 let lastScrollY = 0
