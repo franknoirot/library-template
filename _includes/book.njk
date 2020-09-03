@@ -5,7 +5,7 @@
     <input type="checkbox" class="visually-hidden" id='book-toggle-{{ loopIndex }}'>
     <label class='book-card' for='book-toggle-{{ loopIndex }}'>
         <div class='book-cover'>
-            <img alt='{{ book.title }} cover' src='/img/books/{{ book.coverImg }}' loading='lazy'>
+            <img alt='{{ book.title }} cover' src='/img/books/{{ book.coverImg }}' {% if (loopIndex > 10) %}loading='lazy'{% endif %}>
         </div>
         <div class='book-back'>
             <div class='top-line'>

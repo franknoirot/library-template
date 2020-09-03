@@ -12,17 +12,21 @@ scripts:
             <p id='result-count'>{{ libraryData.books | selectattr("show") | length }} books</p>
             {%- include 'librarySearch.html' -%}
         </div>
+        {% include 'filters.njk' %}
+{#         
         <fieldset class='theme-picker'>
             <legend>Themes</legend>    
             {% for theme in libraryData.siteData %}
             <input id='theme-{{ loop.index0 }}' type='radio' name='themes' value='{{ loop.index0 }}' {% if loop.index == 1 %}checked{% endif %}>
             <label for='theme-{{ loop.index0 }}'>Theme {{ loop.index }}</label> 
             {% endfor %}
-        </fieldset>
+        </fieldset> #}
     </div>
 </nav>
 <section>
-    <p>I took a photo of every book in my apartment and put it here along with some data and a review for the books I've got something to say about. This site is exciting to me because all the data for it comes from a Google Sheet, including the themes, making it really easy to edit. I'd like to explore making a tool that spits out little library sites for people. This one's built using <a href='https://github.com/franknoirot/library-template' target='_blank' rel='noopener'>11ty</a> but I've made a version that uses <a href='https://github.com/franknoirot/gatsby-starter-google-sheets-library' target='_blank' rel='noopener'>Gatsby</a>.</p>
+    <p>I took a photo of every book in my apartment and put it here along with some data and a review for the books I've got something 
+    to say about. This site is exciting to me because all the data for it comes from a <a href="https://docs.google.com/spreadsheets/d/1L6pFNR2fB9451zNvaNzXW_tFJ2ko7YqvuD8qmNz0NWk/edit?usp=sharing" target="_blank" rel="noopener">Google Sheet</a>, including the themes, making it 
+    really easy to edit. I'd like to explore making a tool that spits out little library sites for people. This one's built using <a href='https://github.com/franknoirot/library-template' target='_blank' rel='noopener'>11ty</a> but could be built using any static site generator.</p>
 </section>
 <main id='library'>
     <section class='library-grid'>
