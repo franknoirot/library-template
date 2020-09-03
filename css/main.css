@@ -51,13 +51,15 @@ h1::before {
 .top-navbar {
     position: sticky;
     top: 0px;
-    padding: .8em 5vw;
+    --pad-x: 5vw;
+    padding: .8em var(--pad-x);
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
     background: var(--backgroundColor);
     z-index: 3;
+    transition: all .13s ease-in-out;
 }
 
 .top-navbar.stuck {
@@ -86,9 +88,27 @@ h1::before {
     border-bottom: solid 1px var(--textColor);
 }
 
+#result-count {
+    position: relative;
+    z-index: 0;
+    padding: .2em .4em;
+}
+#result-count::after {
+    content: '';
+    position: absolute;
+    background: var(--cardBackgroundColor);
+    opacity: .2;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    border-radius: .2em;
+    z-index: -1;
+}
+
 .library-grid {
     --gap: 2em;
-    --min-card-width: 230px;
+    --min-card-width: 250px;
     --max-card-width: 1fr;
     margin: 5em 3em;
     display: grid;
@@ -279,18 +299,137 @@ button.back-to-top {
     position: fixed;
     bottom: 5vh;
     left: 2vw;
-    background: transparent;
+    background: var(--cardBackgroundColor);
+    opacity: .5;
     border: none;
     padding: .75em 1em;
     border-radius: .2em;
     box-shadow: 0 0.2vh 0.8vh rgba(0,0,0,0.2), 0 0.7vh 1vh rgba(0,0,0,.08);
     z-index: 6;
-    transition: background .13s ease-in-out;
+    transition: background .13s ease-in-out, opacity .13s ease-in-out;
 }
 
 button.back-to-top:hover {
     background: var(--backgroundColor);
+    opacity: 1;
     color: var(--textColor);
+}
+
+#filter-toggle::after {
+    content: ' ⬇';
+    position: relative;
+}
+#filter-toggle.active::after {
+    content: ' ⬆';
+}
+
+.filters-inner {
+    position: absolute;
+    background: var(--backgroundColor);
+    padding: 1rem 1.5rem;
+    box-shadow: 0 0.2vh 0.8vh rgba(0,0,0,0.2), 0 0.7vh 1vh rgba(0,0,0,.08);
+    top: 100%;
+    right: var(--pad-x);
+    width: min-content;
+    transform: translate(0, .5rem);
+    opacity: 0;
+    transition: all .12s ease-in-out;
+}
+
+#filter-toggle.active + .filters-inner {
+    opacity: 1;
+    transform: translate(0);
+}
+
+.filters > button {
+    font-size: 1em;
+}
+
+.filters button {
+    position: relative;
+    color: var(--textColor);
+    border: solid 1px transparent;
+    border-radius: .2rem;
+    padding: .2em .4em;
+    z-index: 0;
+}
+
+.filters button::before {
+    content: '';
+    position: absolute;
+    border-radius: .2rem;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--cardBackgroundColor);
+    opacity: .2;
+}
+
+.filters button:focus,
+.filters button:hover {
+    border-color: var(--cardTextColor)25;
+}
+
+.filters-inner form {
+    display: flex;
+    align-items: center;
+    width: max-content;
+}
+
+.filters-inner form > * {
+    flex-basis: 100%;
+    white-space: nowrap;
+    margin: .5rem;
+}
+
+.filters-inner form select,
+.filters-inner form input {
+    font-size: .9rem;
+    border: none;
+    border-bottom: solid 1px var(--textColor);
+}
+
+#filter-tags-container {
+    margin-top: .5rem;
+    padding-top: .5rem;
+    border-top: solid 1px var(--cardBackgroundColor);
+    max-width: 100%;
+}
+
+#filter-tags-container .tag {
+    position: relative;
+    display: inline-block;
+    margin: .5rem .4rem 0 0;
+}
+
+#filter-tags-container .tag::after {
+    content: ' ✖';
+    position: relative;
+}
+
+@media (max-width: 650px) {
+    .filters-inner {
+        right: 0;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    #filter-add-form {
+        flex-wrap: wrap;
+        width: 90%;
+        margin: auto;
+    }
+
+    #filter-add-form > * {
+        display: block;
+        margin: .5rem auto;
+    }
+    #filter-is {
+        display: none;
+    }
+
 }
 
 @media(max-width: 500px) {
