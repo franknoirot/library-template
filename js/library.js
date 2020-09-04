@@ -56,11 +56,11 @@ function applyTheme(themeObj) {
 
 // Filter state logic
 const comparisons = [
-    {short: '<', label: 'Less than', fn: (a, b) => (a && a !== null) && ((typeof a === 'string') ? a < b : a < parseInt(b)) },
-    {short: '>', label: 'Greater than', fn: (a, b) =>  (a && a !== null) && ((typeof a === 'string') ? a > b : a > parseInt(b)) },
-    {short: '=', label: 'Equal to', fn: (a, b) =>  (a && a !== null) && ((typeof a === 'string') ? a === b : a === parseInt(b)) },
-    {short: 'contains', label: 'Contains', fn: (a, b) => (a && a !== null) && (a.toString().includes(b.toString())) },
-    {short: "doesn't contain", label: "Doesn't contain", fn: (a, b) => (a && a !== null) && (!a.toString().includes(b.toString())) },
+    {short: '<', label: 'is less than', fn: (a, b) => (a && a !== null) && ((typeof a === 'string') ? a < b : a < parseInt(b)) },
+    {short: '>', label: 'is greater than', fn: (a, b) =>  (a && a !== null) && ((typeof a === 'string') ? a > b : a > parseInt(b)) },
+    {short: '=', label: 'is equal to', fn: (a, b) =>  (a && a !== null) && ((typeof a === 'string') ? a === b : a === parseInt(b)) },
+    {short: 'contains', label: 'contains', fn: (a, b) => (a && a !== null) && (a.toString().includes(b.toString())) },
+    {short: "doesn't contain", label: "doesn't contain", fn: (a, b) => (a && a !== null) && (!a.toString().includes(b.toString())) },
 ]
 function camelToTitleCase(str) {
     return str.slice(0,1).toUpperCase() + str.slice(1).replace(/[A-Z]/g, (s) => ' '+s.toUpperCase())
@@ -73,13 +73,14 @@ const filterParams = themes[0].filterFields.split(',').map(filter => {
     }
 })
 
-const filterToggle = document.getElementById('filter-toggle')
-filterToggle.addEventListener('click', () => {
-    filterToggle.classList.toggle('active')
-    if (filterToggle.classList.contains('active')) {
-        filterToggle.nextElementSibling.querySelector('form > *').focus()
+const toggles = Array.from(document.querySelectorAll('.toggle'))
+toggles.forEach((toggle, i, toggleArr) => toggle.addEventListener('click', function() {
+    this.classList.toggle('active')
+    toggleArr.filter(t => t !== toggle).forEach(t => t.classList.remove('active'))
+    if (this.classList.contains('active')) {
+        this.nextElementSibling.children[0].focus()
     }
-})
+}))
 
 const filterValInput = document.getElementById('filter-val-input')
 
@@ -125,11 +126,18 @@ function filterTag (filter) {
 }
 
 const filterAddForm = document.getElementById('filter-add-form')
-Array.from(filterAddForm.children).map(formEl => formEl.addEventListener('keydown', e => {
-    if (e.keyCode === 27) {
-        filterToggle.click()
-    }
-}))
+const toggleInners = Array.from(document.querySelectorAll('.toggle + *'))
+toggleInners.forEach(inner => {
+    Array.from(inner.children).map(el => {
+        if (!el.tabindex && !(el.tagName === 'A' && el.href) && !(['input', 'select', 'checkbox', 'textarea'].some(tag => tag.toUpperCase() === el.tagName) && !el.disabled)) {
+            el.addEventListener('keydown', e => {
+                if (e.keyCode === 27) {
+                    toggle.previousElementSibling.click()
+                }
+            })
+        }
+    })
+})
 
 function newFilter () {
     return {

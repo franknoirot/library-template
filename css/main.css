@@ -92,6 +92,7 @@ h1::before {
     position: relative;
     z-index: 0;
     padding: .2em .4em;
+    white-space: nowrap;
 }
 #result-count::after {
     content: '';
@@ -103,6 +104,61 @@ h1::before {
     bottom: 0;
     left: 0;
     border-radius: .2em;
+    z-index: -1;
+}
+
+#library-intro {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    gap: 1rem;
+    align-items: center;
+}
+
+#currently-reading {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform-style: preserve-3d;
+    transform: rotate3d(.3, 1, .1, 25deg);
+    perspective: 300px;
+}
+
+#currently-reading h2 {
+    position: absolute;
+    transform: translate3d(-5vw, 4.5vw, 30px);
+    padding: .3rem 1rem;
+    background: var(--backgroundColor);
+    border-image: linear-gradient(to right, var(--backgroundColor) 40%, var(--cardBackgroundColor)) 10 / 2px;
+    border-width: 4px;
+}
+
+#currently-reading small {
+    font-size: 1rem;
+    opacity: .8;
+    font-weight: lighter;
+}
+
+.featured-book {
+    height: 33vh;
+    box-shadow: 0 .8rem .9rem rgba(0,0,0,0.15), 0 1rem 1.3rem rgba(0,0,0,0.08);
+    position: relative;
+}
+
+.featured-book img {
+    max-height: 100%;
+}
+
+.featured-book::before {
+    position: absolute;
+    left: -30%;
+    top: 85%;
+    right: -30%;
+    bottom: -10%;
+    border-radius: 100%;
+    content: '';
+    background: linear-gradient(to bottom, var(--backgroundColor), var(--cardBackgroundColor));
+    opacity: .2;
     z-index: -1;
 }
 
@@ -315,48 +371,74 @@ button.back-to-top:hover {
     color: var(--textColor);
 }
 
-#filter-toggle::after {
-    content: ' ⬇';
+.toggle::after {
+    content: ' ▼';
     position: relative;
 }
-#filter-toggle.active::after {
-    content: ' ⬆';
+.toggle.active::after {
+    content: ' ▲ ';
 }
 
-.filters-inner {
+.toggle {
+    /* margin-top: .5rem;
+    margin-bottom: .5rem; */
+}
+
+.filters-inner,
+.theme-picker {
     display: none;
     position: absolute;
+    font-family: var(--headingFont);
     background: var(--backgroundColor);
     padding: 1rem 1.5rem;
-    box-shadow: 0 0.2vh 0.8vh rgba(0,0,0,0.2), 0 0.7vh 1vh rgba(0,0,0,.08);
     top: 100%;
-    right: var(--pad-x);
+    right: 0;
+    margin: 0 var(--pad-x) 2rem;
+    clip-path: margin-box;
     width: min-content;
     transform: translate(0, .5rem);
     opacity: 0;
     transition: all .12s ease-in-out;
+    border-color: var(--cardTextColor);
+    border-color: var(--cardBackgroundColor);
+    border: solid 1px;
 }
 
-#filter-toggle.active + .filters-inner {
+.stuck .filters-inner,
+.stuck .theme-picker {
+    border-top-color: var(--backgroundColor);
+    box-shadow: 0 0.2vh 0.8vh rgba(0,0,0,0.2), 0 0.7vh 1vh rgba(0,0,0,.08);
+}
+
+#toggle-filters.active + .filters-inner,
+.active + .theme-picker {
     display: block;
     opacity: 1;
     transform: translate(0);
+    width: auto;
 }
 
-.filters > button {
-    font-size: 1em;
+.active + .theme-picker {
+    display: flex;
 }
 
-.filters button {
+.theme-picker > * {
+    margin: .5rem;
+}
+
+button {
     position: relative;
+    font-size: 1em;
     color: var(--textColor);
     border: solid 1px transparent;
     border-radius: .2rem;
     padding: .2em .4em;
+    margin: 0 .5rem;
     z-index: 0;
+    background: transparent;
 }
 
-.filters button::before {
+button::before {
     content: '';
     position: absolute;
     border-radius: .2rem;
@@ -366,10 +448,11 @@ button.back-to-top:hover {
     bottom: 0;
     background: var(--cardBackgroundColor);
     opacity: .2;
+    z-index: -1;
 }
 
-.filters button:focus,
-.filters button:hover {
+button:focus,
+button:hover {
     border-color: var(--cardTextColor)25;
 }
 
@@ -395,7 +478,9 @@ button.back-to-top:hover {
 #filter-tags-container {
     margin-top: .5rem;
     padding-top: .5rem;
-    border-top: solid 1px var(--cardBackgroundColor);
+    border-color: var(--carTextColor);
+    border-color: var(--cardBackgroundColor);
+    border-top: solid 1px;
     max-width: 100%;
 }
 
@@ -411,6 +496,11 @@ button.back-to-top:hover {
 }
 
 @media (max-width: 650px) {
+    #library-intro {
+        grid-template-columns: 1fr;
+        margin-bottom: 5rem;
+    }
+
     .filters-inner {
         right: 0;
         width: 100%;
@@ -428,10 +518,6 @@ button.back-to-top:hover {
         display: block;
         margin: .5rem auto;
     }
-    #filter-is {
-        display: none;
-    }
-
 }
 
 @media(max-width: 500px) {
@@ -439,12 +525,63 @@ button.back-to-top:hover {
         padding: 1vmin;
     }
 
+    h1 {
+        margin-bottom: .5rem;
+        padding-bottom: .5rem;
+        margin-top: .5rem;
+        color: var(--cardTextColor);
+    }
+
+    h1::before {
+        width: 100vw;
+        top: 0;
+        bottom: -2rem;
+        height: unset;
+        z-index: -1;
+        right: unset;
+        left: calc(var(--pad-x) * -1 - 1vmin);
+    }
+
+    #result-count {
+        margin-top: .5rem;
+        white-space: initial;
+        text-align: right;
+    }
+
+    #result-count::after {
+        width: 4px;
+        border-radius: 0;
+        left: unset;
+        right: -4px;
+    }
+
     .top-navbar .library-search {
         margin-top: 0;
         margin-bottom: 0;
     }
 
-    .top-navbar .theme-picker { display: none; }
+    #toggle-filters {
+        margin-left: 0;
+    }
+
+    .lib-control {
+        width: 50%;
+    }
+
+    button.toggle {
+        width: 100%;
+    }
+
+    .toggle.active + .theme-picker {
+        display: flex;
+        flex-direction: column;
+        width: 90%;
+        box-sizing: border-box;
+    }
+
+    .theme-picker > * {
+        margin: .5rem 0;
+    }
 
     .library-grid {
         --min-card-width: 40%;

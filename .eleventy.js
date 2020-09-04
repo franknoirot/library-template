@@ -4,6 +4,11 @@ const markdownIt = require("markdown-it");
 const markdownItAnchor = require("markdown-it-anchor");
 
 module.exports = function(eleventyConfig) {
+  eleventyConfig.addNunjucksFilter("findObjByKeyVal", function (arr, key, val) {
+    console.log(key, val)
+    return arr.find(obj => obj[key] === val)
+  })
+
   eleventyConfig.addPassthroughCopy("css");
   eleventyConfig.addPassthroughCopy("js");
   eleventyConfig.addPassthroughCopy("img");
