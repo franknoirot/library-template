@@ -80,6 +80,10 @@ h1::before {
     flex-wrap: wrap;
 }
 
+.top-navbar:focus-within .back-to-top {
+    display: none;
+}
+
 .search-group {
     display: grid;
     grid-template-columns: auto auto;
@@ -474,6 +478,9 @@ button:hover {
     flex-basis: 100%;
     white-space: nowrap;
     margin: .5rem;
+    background: transparent;
+    font-family: inherit;
+    color: var(--cardTextColor);
 }
 
 .filters-inner form select,
