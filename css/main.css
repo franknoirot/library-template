@@ -80,7 +80,7 @@ h1::before {
     flex-wrap: wrap;
 }
 
-.top-navbar:focus-within .back-to-top {
+.top-navbar:focus-within ~ main .back-to-top {
     display: none;
 }
 
@@ -480,7 +480,7 @@ button:hover {
     margin: .5rem;
     background: transparent;
     font-family: inherit;
-    color: var(--cardTextColor);
+    color: var(--textColor);
 }
 
 .filters-inner form select,
