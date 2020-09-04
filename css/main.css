@@ -16,6 +16,13 @@ p {
     max-width: 80ch;
 }
 
+a[href] {
+    font-weight: bold;
+    color: var(--cardTextColor);
+    color: var(--cardBackgroundColor);
+    text-decoration: none;
+}
+
 section {
     margin: 1em 5vw;
 }
@@ -224,6 +231,7 @@ h1::before {
 
 .book-back {
     --back-opacity: .2;
+    background-color: var(--backgroundColor);
     background: var(--cardBackgroundColor);
     position: absolute;
     left: 0;
