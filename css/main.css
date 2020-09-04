@@ -400,7 +400,6 @@ button.back-to-top:hover {
 .theme-picker {
     display: none;
     position: absolute;
-    font-family: var(--headingFont);
     background: var(--backgroundColor);
     padding: 1rem 1.5rem;
     top: 100%;
@@ -474,20 +473,23 @@ button:hover {
     width: max-content;
 }
 
-.filters-inner form > * {
+.filters-inner form * {
     flex-basis: 100%;
     white-space: nowrap;
     margin: .5rem;
     background: transparent;
-    font-family: inherit;
     color: var(--textColor);
 }
 
 .filters-inner form select,
+.filters-inner form option,
 .filters-inner form input {
     font-size: .9rem;
     border: none;
     border-bottom: solid 1px var(--textColor);
+    background: transparent;
+    font-size: inherit;
+    color: var(--textColor);
 }
 
 #filter-tags-container {
