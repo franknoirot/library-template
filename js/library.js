@@ -15,26 +15,43 @@ const fuseOptions = {
 const books = JSON.parse(Window.libraryBooks.replace(/&quot;/g, '"'))
 const themes= JSON.parse(Window.themes.replace(/&quot;/g, '"'))
 
+console.log(window.location)
+
+const params = new URLSearchParams(document.location.search.slice(1))
+const findParam = p => (params) ? params.get(p) : undefined
+
 let filters = []
 let lastSearch = books
 
 const booksDOM = Array.from(document.querySelectorAll('.book-group'))
 books.forEach((book, i) => { book.elem = booksDOM[i] })
 
+// theme switcher
+let currTheme = themes[0]
+const themeRadios = Array.from(document.querySelectorAll('.theme-picker input'))
+themeRadios.forEach((radio, i) => radio.addEventListener('input', () => {
+    currTheme = applyTheme(themes[i], i)
+}))
+
+if (findParam('t')) {
+    const themeIndex = findParam('t')[1]
+    currTheme = applyTheme(themes[themeIndex], themeIndex)
+}
 
 // Fuse.js is imported as a script tag. It is a small library that provides fuzzy search
 const fuse = new Fuse(books, fuseOptions)
 const searchBar = document.getElementById('search-input')
 const resultCounter = document.getElementById('result-count')
-searchBar.addEventListener('input', ({ target: { value }}) => updateResults('search', value) )
+searchBar.addEventListener('input', ({ target: { value }}) => {
+    updateResults('search', value, currTheme)
+    params.set('s', value)
+})
 
+if (findParam('s')) {
+    updateResults('search', findParam('s')[1], currTheme)
+}
 
-// theme switcher
-let currTheme = themes[0]
-const themeRadios = Array.from(document.querySelectorAll('.theme-picker input'))
-themeRadios.forEach((radio, i) => radio.addEventListener('input', () => applyTheme(themes[i])))
-
-function applyTheme(themeObj) {
+function applyTheme(themeObj, themeIndex) {
     if (!themeObj._processed) {
         themeObj._processed = true
         
@@ -51,7 +68,8 @@ function applyTheme(themeObj) {
         .map(key => document.body.style.setProperty(`--${ key }`,
             (key.toLowerCase().includes('font')) ? `'${themeObj[key]}'` : themeObj[key]))
 
-    currTheme = themeObj
+    params.set('t', themeIndex)
+    return themeObj
 }
 
 // Filter state logic
@@ -115,7 +133,7 @@ function filterTag (filter) {
             ...filters.slice(foundIndex + 1, filters.length),
         ]
         filterTagsContainer.removeChild(this)
-        updateResults('filter')
+        updateResults('filter', undefined, currTheme)
 
         if (filters.length === 0) {
             filterTagsContainer.appendChild(noFiltersStatus)
@@ -164,7 +182,7 @@ function addFilter(e) {
         filterTagsContainer.removeChild(noFiltersStatus)
     }
 
-    updateResults('filter')
+    updateResults('filter', undefined, currTheme)
     filterAddForm.children[0].focus()
 }
 
@@ -179,7 +197,7 @@ function filterResults(results, filters, propHooks) {
         }))
 }
 
-function updateResults(type, val) { 
+function updateResults(type, val, theme) { 
     let searchResults = lastSearch
     if (type === 'search') {
         // do a new search
@@ -188,9 +206,7 @@ function updateResults(type, val) {
     }
 
     const filteredResults = filterResults(searchResults, filters,
-        (currTheme.ignoreArticlesInSort) ? [{ prop: 'title', hook: t => t.toLowerCase().replace(/^the |^an |^a /, '') }] : [])
-
-    console.log('currTheme', currTheme)
+        (theme.ignoreArticlesInSort) ? [{ prop: 'title', hook: t => t.toLowerCase().replace(/^the |^an |^a /, '') }] : [])
     
     booksDOM.forEach(b => b.classList.add('hidden'))
     resultCounter.innerText = filteredResults.length + ' book' + ((filteredResults.length > 1) ? 's' : '')
@@ -212,3 +228,8 @@ window.addEventListener('scroll', function() {
     }
     lastScrollY = window.scrollY
 }, { passive: true })
+
+// URL update function
+function updateURLParams(state) {
+    Object.keys(state).map(key => params.set(key, state[key].toString()))
+}

@@ -43,12 +43,13 @@
             <p>{{ book.pages }} pages</p>
             {% if book.category %}<p>Category: {{ book.category }}</p>{% endif %}
             {% if book.translator %}<p>Translated by {{ book.translator }}</p>{% endif %}
-            {% if book.publisher %}<p>Published by {{ book.publisher }}{% endif %}{% if book.publishLocation %}in {{ book.publishLocation }}</p>{% endif %}
+            {% if book.publisher %}<p>Published by {{ book.publisher }}{% endif %}{% if book.publishLocation %} in {{ book.publishLocation }}</p>{% endif %}
             {% if book.language %}<p>Language: {{ book.language }}</p>{% endif %}
+            {% if book.status %}<p>Status: {{ book.status }}</p>{% endif %}
             {% if book.tags %}<p>Tags: {{ book.tags }}</p>{% endif %}
             <div class='borrowed-row {% if not book.isBorrowed %}active{% endif %}'>
                 <span>borrowed</span>
-                <div class='toggle'></div>
+                <div class='book-toggle'></div>
                 <span>available</span>
             </div>
         </div>

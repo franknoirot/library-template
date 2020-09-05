@@ -303,7 +303,7 @@ h1::before {
     margin-bottom: 2em;
 }
 
-.book-back .toggle {
+.book-back .book-toggle {
     width: 2em;
     height: 1em;
     border: solid 1px var(--cardTextColor);
@@ -311,7 +311,7 @@ h1::before {
     position: relative;
 }
 
-.book-back .toggle::after {
+.book-back .book-toggle::after {
     content: '';
     position: absolute;
     --size: .75em;
@@ -625,7 +625,7 @@ button:hover {
         background: var(--cardBackgroundColor);
     }
 
-    .borrowed-row .toggle,
+    .borrowed-row .book-toggle,
     .borrowed-row.active span:first-of-type,
     .borrowed-row span:last-of-type {
         display: none;
