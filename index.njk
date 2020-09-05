@@ -51,6 +51,6 @@ scripts:
     {%- include 'backToTopBtn.njk' -%}
 </main>
 <script type='text/javascript'>
-    Window.libraryBooks = `{{ libraryData.books | selectattr("show") | dump }}`;
-    Window.themes = `{{ libraryData.siteData | dump }}`;
+    Window.libraryBooks = `{{ libraryData.books | selectattr("show") | dump(2) }}`;
+    Window.themes = `{{ libraryData.siteData | dump(2) }}`;
 </script>

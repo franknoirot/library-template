@@ -52,6 +52,9 @@
                 <div class='book-toggle'></div>
                 <span>available</span>
             </div>
+            {% if not book.isBorrowed %}
+            <a class='borrow-cta' href='mailto:frank@franknoirot.co?subject=Request to Borrow: {{ book.title }}'>Request to Borrow</a>
+            {% endif %}
         </div>
     </label>
 </article>

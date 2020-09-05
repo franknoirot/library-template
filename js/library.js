@@ -12,6 +12,7 @@ const fuseOptions = {
 }
 
 // Nunjucks puts in html entities instead of real quote characters. 
+console.log(Window.libraryBooks.replace(/&quot;/g, '"').split("\n"))
 const books = JSON.parse(Window.libraryBooks.replace(/&quot;/g, '"'))
 const themes= JSON.parse(Window.themes.replace(/&quot;/g, '"'))
 

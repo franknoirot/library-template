@@ -359,6 +359,35 @@ h1::before {
     opacity: 0;
 }
 
+a.borrow-cta {
+    color: var(--cardTextColor);
+    font-family: var(--headingFont);
+    display: block;
+    padding: .5rem;
+    text-align: center;
+    margin-block-end: 1rem;
+    border: solid;
+    position: relative;
+    z-index: 0;
+}
+
+a.borrow-cta::after {
+    position: absolute;
+    content: '';
+    z-index: -1;
+    background: var(--backgroundColor);
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    opacity: 0;
+    transition: opacity .12s ease-in-out;
+}
+
+a.borrow-cta:hover::after {
+    opacity: var(--back-opacity);
+}
+
 
 
 /* Back to Top Button */
