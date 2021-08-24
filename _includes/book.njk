@@ -1,21 +1,19 @@
 {# nunjucks doesn't like me putting @ symbols in for Vue to pick up so I'll store them in nunjuck variables #}
-{%- set clickAlias = '@click' -%}
+{# {%- set clickAlias = '@click' -%} #}
+{% set bookCoverImgPath = ["./img/books/", book.coverImg] | join %}
 
 <article id='{{ book.title | slug }}' class='book-group'>
     <input type="checkbox" class="visually-hidden" id='book-toggle-{{ loopIndex }}'>
     <label class='book-card' for='book-toggle-{{ loopIndex }}'>
         <div class='book-cover'>
-            <img alt='{{ book.title }} cover' 
-                 srcset='/img/books/{{ book.coverImg }} 1000w, /img/books/{{ book.coverImg  | replace(".jpg", "_50.jpg") }} 500w, /img/books/{{ book.coverImg | replace(".jpg", "_25.jpg") }} 300w'
-                 sizes="(max-width: 720px) 40vw, (max-width: 1920px) 25vw, 1200px"
-                 {% if (loopIndex > 10) %}loading='lazy'{% endif %}>
+            {% imageSync bookCoverImgPath, '', book.title %}
         </div>
         <div class='book-back'>
             <div class='top-line'>
                 <h2>{{ book.title }}</h2>
-                {%- if book.subtitle -%}
+                {% if book.subtitle %}
                 <p class='subtitle'><em>{{ book.subtitle }}</em></p>
-                {%- endif -%}
+                {% endif %}
             </div>
             <p>{% if (not book.author) and (book.editor) %}edited by {{ book.editor }}{% else %}by {{ book.author }}{% endif %}</p>
             <p>{{ book.publishDate }}{% if book.publishDate != book.firstPublished %} | first published {{ book.firstPublished }}{% endif %}</p>

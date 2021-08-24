@@ -1,5 +1,7 @@
-const fs = require("fs");
+
 require('dotenv').config();
+const fs = require("fs");
+const Image = require("@11ty/eleventy-img");
 const markdownIt = require("markdown-it");
 const markdownItAnchor = require("markdown-it-anchor");
 
@@ -11,7 +13,9 @@ module.exports = function(eleventyConfig) {
 
   eleventyConfig.addPassthroughCopy("css");
   eleventyConfig.addPassthroughCopy("js");
-  eleventyConfig.addPassthroughCopy("img");
+
+  eleventyConfig.addNunjucksAsyncShortcode("image", imageShortcode);
+  eleventyConfig.addNunjucksShortcode("imageSync", imageShortcodeSync)
 
   /* Markdown Overrides */
   let markdownLibrary = markdownIt({
@@ -72,3 +76,43 @@ module.exports = function(eleventyConfig) {
     }
   };
 };
+
+async function imageShortcode(src, alt, sizes) {
+  let metadata = await Image(src, {
+    widths: [300, 600, 960],
+    formats: ["webp", "jpeg"],
+    outputDir: "./_site/img/",
+  });
+
+  let imageAttributes = {
+    alt,
+    sizes,
+    loading: "lazy",
+    decoding: "async",
+  };
+
+  // You bet we throw an error on missing alt in `imageAttributes` (alt="" works okay)
+  return Image.generateHTML(metadata, imageAttributes);
+}
+
+function imageShortcodeSync(src, cls, alt, sizes, widths) {
+  let options = {
+    widths: widths || [300, 600, 960],
+    formats: ['webp', 'jpeg'],
+    outputDir: "./_site/img",
+  };
+
+  // generate images, while this is async we don’t wait
+  Image(src, options);
+
+  let imageAttributes = {
+    class: cls,
+    alt,
+    sizes: sizes || "(min-width: 20vw) 35vw, 50vw",
+    loading: "lazy",
+    decoding: "async",
+  };
+  // get metadata even the images are not fully generated
+  metadata = Image.statsSync(src, options);
+  return Image.generateHTML(metadata, imageAttributes);
+}

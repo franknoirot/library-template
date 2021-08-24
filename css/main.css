@@ -156,10 +156,6 @@ h1::before {
     position: relative;
 }
 
-.featured-book img {
-    max-height: 100%;
-}
-
 .featured-book::before {
     position: absolute;
     left: -30%;
@@ -200,10 +196,13 @@ h1::before {
     transform: translateY(-3px);
 }
 
-.book-card img {
+.book-card img,
+.featured-book img {
     display: block;
     max-height: 20rem;
     margin: auto;
+    object-fit: contain;
+    width: auto;
 }
 
 .book-cover, .book-back {
