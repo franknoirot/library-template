@@ -156,6 +156,10 @@ h1::before {
     position: relative;
 }
 
+.featured-book img {
+    height: 100%;
+}
+
 .featured-book::before {
     position: absolute;
     left: -30%;
@@ -346,7 +350,7 @@ h1::before {
  }
 
 
-.book-back .active .toggle::after {
+.book-back .active .book-toggle::after {
     transform: translate(0, -50%);
 }
 

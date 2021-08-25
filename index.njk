@@ -32,10 +32,10 @@ scripts:
     to say about. This site is exciting to me because all the data for it comes from a <a href="https://docs.google.com/spreadsheets/d/1L6pFNR2fB9451zNvaNzXW_tFJ2ko7YqvuD8qmNz0NWk/edit?usp=sharing" target="_blank" rel="noopener">Google Sheet</a>, including the themes, making it 
     really easy to edit. I'd like to explore making a tool that spits out little library sites for people. This one's built using <a href='https://github.com/franknoirot/library-template' target='_blank' rel='noopener'>11ty</a> but could be built using any static site generator.</p>
     {% set featuredBook = libraryData.books | findObjByKeyVal('title', libraryData.siteData[0].featuredBook) %}
-    {% set featuredImagePath = ["./img/books/", featuredBook.coverImg] | join %}
+    {% set featuredImagePath = ["img/books/", featuredBook.coverImg] | join %}
     <div id='currently-reading'>
         <div class='featured-book'>
-            {% image featuredImagePath, featuredBook.title, "(min-width: 20vw) 35vw, 50vw" %}
+            {% image featuredImagePath, featuredBook.title %}
         </div>
         <h2><small>Currently Reading:</small><br>{{ featuredBook.title }}</h2>
     </div>

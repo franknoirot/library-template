@@ -1,12 +1,12 @@
 {# nunjucks doesn't like me putting @ symbols in for Vue to pick up so I'll store them in nunjuck variables #}
 {# {%- set clickAlias = '@click' -%} #}
-{% set bookCoverImgPath = ["./img/books/", book.coverImg] | join %}
+{% set bookCoverImgPath = ["img/books/", book.coverImg] | join %}
 
 <article id='{{ book.title | slug }}' class='book-group'>
     <input type="checkbox" class="visually-hidden" id='book-toggle-{{ loopIndex }}'>
     <label class='book-card' for='book-toggle-{{ loopIndex }}'>
         <div class='book-cover'>
-            {% imageSync bookCoverImgPath, '', book.title %}
+            {% imageSync bookCoverImgPath, book.title %}
         </div>
         <div class='book-back'>
             <div class='top-line'>

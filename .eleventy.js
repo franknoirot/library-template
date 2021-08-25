@@ -1,13 +1,13 @@
 
 require('dotenv').config();
 const fs = require("fs");
+const path = require('path')
 const Image = require("@11ty/eleventy-img");
 const markdownIt = require("markdown-it");
 const markdownItAnchor = require("markdown-it-anchor");
 
 module.exports = function(eleventyConfig) {
   eleventyConfig.addNunjucksFilter("findObjByKeyVal", function (arr, key, val) {
-    console.log(key, val)
     return arr.find(obj => obj[key] === val)
   })
 
@@ -77,38 +77,57 @@ module.exports = function(eleventyConfig) {
   };
 };
 
-async function imageShortcode(src, alt, sizes) {
-  let metadata = await Image(src, {
-    widths: [300, 600, 960],
-    formats: ["webp", "jpeg"],
+async function imageShortcode(src, alt) {
+  if (!alt) {
+    throw new Error(`Missing \`alt\` on myImage from: ${src}`);
+  }
+
+  let stats = await Image(src, {
+    widths: [640, 960, 1200],
+    formats: ["jpeg", "webp"],
     outputDir: "./_site/img/",
   });
 
-  let imageAttributes = {
-    alt,
-    sizes,
-    loading: "lazy",
-    decoding: "async",
-  };
+  let lowestSrc = stats["jpeg"][0];
 
-  // You bet we throw an error on missing alt in `imageAttributes` (alt="" works okay)
-  return Image.generateHTML(metadata, imageAttributes);
+  const srcset = Object.keys(stats).reduce(
+    (acc, format) => ({
+      ...acc,
+      [format]: stats[format].reduce(
+        (_acc, curr) => `${_acc} ${curr.srcset} ,`,
+        ""
+      ),
+    }),
+    {}
+  );
+
+  const source = `<source type="image/webp" srcset="${srcset["webp"]}" >`;
+
+  const img = `<img
+    loading="lazy"
+    alt="${alt}"
+    src="${lowestSrc.url}"
+    sizes='(min-width: 1024px) 1024px, 100vw'
+    srcset="${srcset["jpeg"]}"
+    width="${lowestSrc.width}"
+    height="${lowestSrc.height}">`;
+
+  return `<picture> ${source} ${img} </picture>`;
 }
 
-function imageShortcodeSync(src, cls, alt, sizes, widths) {
+function imageShortcodeSync(src, alt) {
   let options = {
-    widths: widths || [300, 600, 960],
-    formats: ['webp', 'jpeg'],
-    outputDir: "./_site/img",
-  };
+    widths: [640, 960, 1200],
+    formats: ["jpeg", "webp"],
+    outputDir: "./_site/img/",
+  }
 
   // generate images, while this is async we don’t wait
   Image(src, options);
 
   let imageAttributes = {
-    class: cls,
     alt,
-    sizes: sizes || "(min-width: 20vw) 35vw, 50vw",
+    sizes: "(min-width: 1024px) 1024px, 100vw",
     loading: "lazy",
     decoding: "async",
   };

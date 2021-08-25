@@ -1,8 +1,6 @@
 require('isomorphic-fetch')
 const parse = require('csv-parse')
 
-console.log({ theme: process.env.THEME_SHEET })
-
 module.exports = async function () {
     const fetchPromises = [
         fetch(process.env.THEME_SHEET),
